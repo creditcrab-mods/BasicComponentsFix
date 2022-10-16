@@ -231,7 +231,6 @@ public class BlockBasicMachine extends BlockAdvanced {
 
    @Override
    public TileEntity createNewTileEntity(World world, int metadata) {
-      System.out.println("Create TE");
       return (TileEntity)(metadata >= 8?new TileEntityElectricFurnace():(metadata >= 4?new TileEntityBatteryBox():new TileEntityCoalGenerator()));
    }
 

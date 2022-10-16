@@ -37,7 +37,6 @@ public class BCGuiHandler implements IGuiHandler {
 
    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
       TileEntity tileEntity = world.getTileEntity(x, y, z);
-      System.out.println("Open GUI");
       if(tileEntity != null) {
          if(tileEntity instanceof TileEntityBatteryBox) {
             return new ContainerBatteryBox(player.inventory, (TileEntityBatteryBox)tileEntity);
