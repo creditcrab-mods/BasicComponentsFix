@@ -24,8 +24,7 @@ public class BlockMulti extends BlockContainer {
    public BlockMulti() {
       super(UniversalElectricity.machine);
       this.setHardness(0.8F);
-      //TODO WTF
-      //this.setUnlocalizedName("multiBlock");
+      this.setBlockName("multiBlock");
    }
 
    public BlockMulti setChannel(String channel) {

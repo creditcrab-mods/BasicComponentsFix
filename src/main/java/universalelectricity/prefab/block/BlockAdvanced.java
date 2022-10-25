@@ -105,11 +105,6 @@ public abstract class BlockAdvanced extends BlockContainer {
    }
 
    @Override
-   public TileEntity createTileEntity(World var1, int meta) {
-      return null;
-   }
-
-   @Override
    public void breakBlock(World world, int x, int y, int z, Block par5, int par6) {
       this.dropEntireInventory(world, x, y, z, par5, par6);
       super.breakBlock(world, x, y, z, par5, par6);

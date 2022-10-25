@@ -3,6 +3,7 @@ package basiccomponents.common.item;
 import basiccomponents.common.item.ItemBase;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ItemCircuit extends ItemBase {
@@ -24,7 +25,8 @@ public class ItemCircuit extends ItemBase {
       return "item.basiccomponents:" + TYPES[itemStack.getItemDamage()];
    }
 
-   public void func_77633_a(int par1, CreativeTabs par2CreativeTabs, List list) {
+   @Override
+   public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List list) {
       for(int i = 0; i < TYPES.length; ++i) {
          list.add(new ItemStack(this, 1, i));
       }

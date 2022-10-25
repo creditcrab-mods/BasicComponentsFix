@@ -84,7 +84,8 @@ public abstract class ItemElectric extends Item implements IItemElectric {
       }
    }
 
-   public void func_77633_a(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+   @Override
+   public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List) {
       par3List.add(ElectricItemHelper.getUncharged(new ItemStack(this)));
       ItemStack chargedItem = new ItemStack(this);
       par3List.add(ElectricItemHelper.getWithCharge(chargedItem, this.getMaxJoules(chargedItem)));

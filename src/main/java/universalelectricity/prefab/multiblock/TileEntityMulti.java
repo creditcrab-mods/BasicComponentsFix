@@ -1,17 +1,13 @@
 package universalelectricity.prefab.multiblock;
 
-import com.google.common.io.ByteArrayDataInput;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.multiblock.BlockMulti;
-import universalelectricity.prefab.multiblock.IMultiBlock;
 
 public class TileEntityMulti extends TileEntity {
 
@@ -33,18 +29,15 @@ public class TileEntityMulti extends TileEntity {
 
    }
 
-   /*@Override
+   @Override
    public Packet getDescriptionPacket() {
       if(this.mainBlockPosition == null) {
          return null;
       } else {
-         if(this.channel == null || this.channel == "" && this.getBlockType() instanceof BlockMulti) {
-            this.channel = ((BlockMulti)this.getBlockType()).channel;
-         }
-
-         return PacketManager.getPacket(this.channel, this, new Object[]{Integer.valueOf(this.mainBlockPosition.intX()), Integer.valueOf(this.mainBlockPosition.intY()), Integer.valueOf(this.mainBlockPosition.intZ())});
+         NBTTagCompound nbt = this.mainBlockPosition.writeToNBT(new NBTTagCompound());
+         return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, getBlockMetadata(),nbt);
       }
-   }*/
+   }
 
    public void onBlockRemoval() {
       if(this.mainBlockPosition != null) {
@@ -89,18 +82,10 @@ public class TileEntityMulti extends TileEntity {
       return false;
    }
 
-   /*@Override
-   public void handlePacketData(NetworkManager network, int packetType, S3FPacketCustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) {
-      try {
-         this.mainBlockPosition = new Vector3((double)dataStream.readInt(), (double)dataStream.readInt(), (double)dataStream.readInt());
-      } catch (Exception var7) {
-         var7.printStackTrace();
-      }
-   }*/
-
    @Override
    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-
+      NBTTagCompound nbt = pkt.func_148857_g();
+      this.mainBlockPosition = Vector3.readFromNBT(nbt);
    }
 
 }

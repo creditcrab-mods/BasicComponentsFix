@@ -16,8 +16,12 @@ buildscript {
 }
 
 apply plugin: 'forge'
+apply plugin: 'maven-publish'
 
-version = "1.0.0-dirty"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+version = "1.0.1-dirty"
 group= "universalelectricity"
 archivesBaseName = "basiccomponents"
 
@@ -43,5 +47,43 @@ processResources
       
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+publishing {
+    tasks.publish.dependsOn 'build'
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = project.archivesBaseName
+
+            artifact deobfJar
+            artifact sourcesJar
+            artifact jar
+        }
+    }
+
+    repositories {
+	if (project.hasProperty('mvnURL')) {
+		maven {
+                    credentials {
+                	username findProperty("mvnUsername")
+                	password findProperty("mvnPassword")
+            	    }
+            	    url = findProperty("mvnURL")
+        	}
+	}
+	else {
+		mavenLocal()
+	}
     }
 }
