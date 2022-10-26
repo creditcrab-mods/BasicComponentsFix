@@ -41,21 +41,18 @@ public class ElectricityDisplay {
 
    public static enum ElectricUnit {
 
-      AMPERE("AMPERE", 0, "Amp", "I"),
-      AMP_HOUR("AMP_HOUR", 1, "Amp Hour", "Ah"),
-      VOLTAGE("VOLTAGE", 2, "Volt", "V"),
-      WATT("WATT", 3, "Watt", "W"),
-      WATT_HOUR("WATT_HOUR", 4, "Watt Hour", "Wh"),
-      RESISTANCE("RESISTANCE", 5, "Ohm", "R"),
-      CONDUCTANCE("CONDUCTANCE", 6, "Siemen", "S"),
-      JOULES("JOULES", 7, "Joule", "J");
+      AMPERE("Amp", "I"),
+      AMP_HOUR("Amp Hour", "Ah"),
+      VOLTAGE("Volt", "V"),
+      WATT("Watt", "W"),
+      WATT_HOUR("Watt Hour", "Wh"),
+      RESISTANCE("Ohm", "R"),
+      CONDUCTANCE("Siemen", "S"),
+      JOULES("Joule", "J");
       public String name;
       public String symbol;
-      // $FF: synthetic field
-      private static final ElectricityDisplay.ElectricUnit[] $VALUES = new ElectricityDisplay.ElectricUnit[]{AMPERE, AMP_HOUR, VOLTAGE, WATT, WATT_HOUR, RESISTANCE, CONDUCTANCE, JOULES};
 
-
-      private ElectricUnit(String var1, int var2, String name, String symbol) {
+      private ElectricUnit(String name, String symbol) {
          this.name = name;
          this.symbol = symbol;
       }
@@ -68,18 +65,16 @@ public class ElectricityDisplay {
 
    public static enum MeasurementUnit {
 
-      MICRO("MICRO", 0, "Micro", "mi", 1.0E-6D),
-      MILLI("MILLI", 1, "Milli", "m", 0.001D),
-      KILO("KILO", 2, "Kilo", "k", 1000.0D),
-      MEGA("MEGA", 3, "Mega", "M", 1000000.0D);
+      MICRO("Micro", "mi", 1.0E-6D),
+      MILLI("Milli", "m", 0.001D),
+      KILO("Kilo", "k", 1000.0D),
+      MEGA("Mega", "M", 1000000.0D);
       public String name;
       public String symbol;
       public double value;
-      // $FF: synthetic field
-      private static final ElectricityDisplay.MeasurementUnit[] $VALUES = new ElectricityDisplay.MeasurementUnit[]{MICRO, MILLI, KILO, MEGA};
 
 
-      private MeasurementUnit(String var1, int var2, String name, String symbol, double value) {
+      private MeasurementUnit(String name, String symbol, double value) {
          this.name = name;
          this.symbol = symbol;
          this.value = value;

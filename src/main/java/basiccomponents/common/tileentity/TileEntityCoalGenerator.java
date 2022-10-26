@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -38,7 +39,7 @@ public class TileEntityCoalGenerator extends TileEntityElectrical implements IIn
    public IConductor connectedElectricUnit = null;
    public int itemCookTime = 0;
    private ItemStack[] containingItems = new ItemStack[1];
-   public final Set playersUsing = new HashSet();
+   public final Set<EntityPlayer> playersUsing = new HashSet();
 
 
    public boolean canConnect(ForgeDirection direction) {
@@ -90,13 +91,11 @@ public class TileEntityCoalGenerator extends TileEntityElectrical implements IIn
          }
 
          if(super.ticks % 3L == 0L) {
-            /*Iterator i$ = this.playersUsing.iterator();
-
-            while(i$.hasNext()) {
-               EntityPlayer player = (EntityPlayer)i$.next();
-               PacketDispatcher.sendPacketToPlayer(this.func_70319_e(), (Player)player);
-            }*/
-            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            for (EntityPlayer player : this.playersUsing) {
+               if (player instanceof EntityPlayerMP) {
+                  ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(getDescriptionPacket());
+               }
+            }
          }
 
          if(this.prevGenerateWatts <= 0.0D && this.generateWatts > 0.0D || this.prevGenerateWatts > 0.0D && this.generateWatts <= 0.0D) {

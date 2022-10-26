@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -28,7 +29,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
    public static final int PROCESS_TIME_REQUIRED = 130;
    public int processTicks = 0;
    private ItemStack[] containingItems = new ItemStack[3];
-   public final Set playersUsing = new HashSet();
+   public final Set<EntityPlayer> playersUsing = new HashSet();
 
    @Override
    public void updateEntity() {
@@ -58,13 +59,11 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
          }
 
          if(super.ticks % 3L == 0L) {
-            /*Iterator i$ = this.playersUsing.iterator();
-
-            while(i$.hasNext()) {
-               EntityPlayer player = (EntityPlayer)i$.next();
-               PacketDispatcher.sendPacketToPlayer(this.func_70319_e(), (Player)player);
-            }*/
-
+            for (EntityPlayer player : this.playersUsing) {
+               if (player instanceof EntityPlayerMP) {
+                  ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(getDescriptionPacket());
+               }
+            }
             this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
          }
       }

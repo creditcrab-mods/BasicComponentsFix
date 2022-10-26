@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,7 +30,7 @@ import universalelectricity.prefab.tile.TileEntityElectricityStorage;
 public class TileEntityBatteryBox extends TileEntityElectricityStorage implements IElectricityStorage, ISidedInventory {
 
    private ItemStack[] containingItems = new ItemStack[2];
-   public final Set playersUsing = new HashSet();
+   public final Set<EntityPlayer> playersUsing = new HashSet();
 
 
    @Override
@@ -56,14 +57,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 
       this.setJoules(this.getJoules() - 5.0E-5D);
       if(!this.worldObj.isRemote && super.ticks % 3L == 0L) {
-         /*Iterator i$1 = this.playersUsing.iterator();
-
-         while(i$1.hasNext()) {
-            EntityPlayer player1 = (EntityPlayer)i$1.next();
-
-            PacketDispatcher.sendPacketToPlayer(this.func_70319_e(), (Player)player1);
-         }*/
-         this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+         for (EntityPlayer player : this.playersUsing) {
+            if (player instanceof EntityPlayerMP) {
+               ((EntityPlayerMP) player).playerNetServerHandler.sendPacket(getDescriptionPacket());
+            }
+         }
       }
 
    }

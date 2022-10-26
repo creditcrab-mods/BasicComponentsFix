@@ -24,6 +24,7 @@ public class ItemWrench extends ItemBase implements IToolConfigurator {
 
    public void wrenchUsed(EntityPlayer entityPlayer, int x, int y, int z) {}
 
+   @Override
    public boolean onItemUseFirst(ItemStack stack, EntityPlayer entityPlayer, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
       Block block = world.getBlock(x, y, z);
       if(block != Blocks.furnace && block != Blocks.lit_furnace && block != Blocks.dropper && block != Blocks.hopper && block != Blocks.dispenser && block != Blocks.piston && block != Blocks.sticky_piston) {
@@ -41,11 +42,13 @@ public class ItemWrench extends ItemBase implements IToolConfigurator {
       }
    }
 
+   @Override
    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
       return false;
    }
 
-   public boolean shouldPassSneakingClickToBlock(World world, int x, int y, int z) {
+   @Override
+   public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
       return true;
    }
 }

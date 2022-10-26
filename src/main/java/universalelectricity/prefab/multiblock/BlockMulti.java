@@ -39,7 +39,15 @@ public class BlockMulti extends BlockContainer {
 
    public void makeFakeBlock(World worldObj, Vector3 position, Vector3 mainBlock) {
       worldObj.setBlock(position.intX(), position.intY(), position.intZ(), this);
-      ((TileEntityMulti)worldObj.getTileEntity(position.intX(), position.intY(), position.intZ())).setMainBlock(mainBlock);
+      TileEntity tile = position.getTileEntity(worldObj);
+      if (tile instanceof TileEntityMulti) {
+         ((TileEntityMulti)tile).setMainBlock(mainBlock);
+      } else {
+         TileEntityMulti newTile = (TileEntityMulti)createNewTileEntity(worldObj, 0);
+         worldObj.setTileEntity(position.intX(), position.intY(), position.intZ(), newTile);
+         newTile.setMainBlock(mainBlock);
+
+      }
    }
 
    @SideOnly(Side.CLIENT)
