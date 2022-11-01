@@ -1,15 +1,18 @@
 package universalelectricity.prefab.tile;
 
 import java.util.EnumSet;
+
+import mekanism.api.energy.IStrictEnergyAcceptor;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.prefab.tile.TileEntityElectrical;
 
-public abstract class TileEntityElectricityStorage extends TileEntityElectrical implements IElectricityStorage {
+public abstract class TileEntityElectricityStorage extends TileEntityElectrical implements IElectricityStorage, IStrictEnergyAcceptor {
 
    private double joules = 0.0D;
    public double prevJoules = 0.0D;
@@ -29,7 +32,7 @@ public abstract class TileEntityElectricityStorage extends TileEntityElectrical 
 
    }
 
-   protected EnumSet getConsumingSides() {
+   protected EnumSet<ForgeDirection> getConsumingSides() {
       return ElectricityNetworkHelper.getDirections(this);
    }
 
@@ -64,4 +67,16 @@ public abstract class TileEntityElectricityStorage extends TileEntityElectrical 
    public void setJoules(double joules) {
       this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0.0D);
    }
+
+	public double transferEnergyToAcceptor(ForgeDirection side, double amount) {
+      if (!canReceiveEnergy(side)) return 0;
+      double toUse = Math.min(getMaxEnergy()-getEnergy(), amount);
+      setEnergy(toUse + getEnergy());
+      return toUse;
+   }
+
+	public boolean canReceiveEnergy(ForgeDirection side) {
+      return getConsumingSides().contains(side);
+   }
+
 }

@@ -15,7 +15,6 @@ public class ItemWrench extends ItemBase implements IToolConfigurator {
    public ItemWrench() {
       super("wrench");
       this.setMaxStackSize(1);
-      this.setCreativeTab(CreativeTabs.tabTools);
    }
 
    public boolean canWrench(EntityPlayer entityPlayer, int x, int y, int z) {

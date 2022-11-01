@@ -14,6 +14,7 @@ public class VectorHelper {
       return front != ForgeDirection.UNKNOWN && side != ForgeDirection.UNKNOWN?ForgeDirection.getOrientation(RELATIVE_MATRIX[front.ordinal()][side.ordinal()]):ForgeDirection.UNKNOWN;
    }
 
+   @Deprecated
    public static TileEntity getConnectorFromSide(World world, Vector3 position, ForgeDirection side) {
       TileEntity tileEntity = getTileEntityFromSide(world, position, side);
       return tileEntity instanceof IConnector && ((IConnector)tileEntity).canConnect(getOrientationFromSide(side, ForgeDirection.NORTH))?tileEntity:null;

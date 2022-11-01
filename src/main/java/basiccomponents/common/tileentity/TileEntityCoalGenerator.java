@@ -1,19 +1,13 @@
 package basiccomponents.common.tileentity;
 
-import basiccomponents.common.BasicComponents;
-import com.google.common.io.ByteArrayDataInput;
-
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -58,6 +52,7 @@ public class TileEntityCoalGenerator extends TileEntityElectrical implements IIn
             if(network.getRequest(new TileEntity[0]).getWatts() > 0.0D) {
                this.connectedElectricUnit = (IConductor)outputTile;
             } else {
+               network.stopProducing(this);
                this.connectedElectricUnit = null;
             }
          } else {

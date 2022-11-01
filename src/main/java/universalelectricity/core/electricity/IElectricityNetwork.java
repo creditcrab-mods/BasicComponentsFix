@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
+import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnectionProvider;
-import universalelectricity.core.electricity.ElectricityPack;
 
 public interface IElectricityNetwork {
 
@@ -33,15 +33,15 @@ public interface IElectricityNetwork {
 
    ElectricityPack consumeElectricity(TileEntity var1);
 
-   HashMap getProducers();
+   HashMap<TileEntity, ElectricityPack> getProducers();
 
-   List getProviders();
+   List<TileEntity> getProviders();
 
-   HashMap getConsumers();
+   HashMap<TileEntity, ElectricityPack> getConsumers();
 
-   List getReceivers();
+   List<TileEntity> getReceivers();
 
-   Set getConductors();
+   Set<IConductor> getConductors();
 
    double getTotalResistance();
 
@@ -54,4 +54,9 @@ public interface IElectricityNetwork {
    void mergeConnection(IElectricityNetwork var1);
 
    void splitNetwork(IConnectionProvider var1);
+
+   boolean isInactive();
+
+   void tick();
+   
 }

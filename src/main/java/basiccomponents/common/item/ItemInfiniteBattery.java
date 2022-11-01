@@ -14,7 +14,6 @@ public class ItemInfiniteBattery extends ItemBase implements IItemElectric {
       super(name);
       this.setMaxStackSize(1);
       this.setNoRepair();
-      this.setCreativeTab(CreativeTabs.tabRedstone);
    }
 
    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {

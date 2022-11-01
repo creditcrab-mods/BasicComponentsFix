@@ -1,8 +1,6 @@
 package basiccomponents.common;
 
 import basiccomponents.client.RenderCopperWire;
-import basiccomponents.common.BCGuiHandler;
-import basiccomponents.common.CommonProxy;
 import basiccomponents.common.block.BlockBase;
 import basiccomponents.common.block.BlockBasicMachine;
 import basiccomponents.common.block.BlockCopperWire;
@@ -29,14 +27,11 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -45,7 +40,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import universalelectricity.compat.CompatHandler;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.prefab.RecipeHelper;
@@ -125,6 +120,8 @@ public class BasicComponents {
       registerCircuits();
       registerMachines();
       CONFIGURATION.save();
+      CompatHandler.initCompatHandlers();
+      
    }
 
    @Mod.EventHandler
@@ -135,14 +132,12 @@ public class BasicComponents {
    public static void registerDusts() {
       if (OreDictionary.getOres("dustBronze").isEmpty()) {
          itemDustBronze = new ItemBase("dustBronze");
-         itemDustBronze.setCreativeTab(CreativeTabs.tabMaterials);
          GameRegistry.registerItem(itemDustBronze, "dustBronze");
          RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemDustBronze), new Object[]{"!#!", Character.valueOf('!'), "ingotCopper", Character.valueOf('#'), "ingotTin"}), CONFIGURATION, true);
          GameRegistry.addSmelting(itemDustBronze, (ItemStack)OreDictionary.getOres("ingotBronze").get(0), 0.6F);
       }
       if (OreDictionary.getOres("dustSteel").isEmpty()) {
          itemDustSteel = new ItemBase("dustSteel");
-         itemDustSteel.setCreativeTab(CreativeTabs.tabMaterials);
          GameRegistry.registerItem(itemDustSteel, "dustSteel");
          RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemDustSteel), new Object[]{" C ", "CIC", " C ", Character.valueOf('I'), Items.iron_ingot, Character.valueOf('C'), Items.coal}), CONFIGURATION, true);
          GameRegistry.addSmelting(itemDustSteel, (ItemStack)OreDictionary.getOres("ingotSteel").get(0), 0.6F);
@@ -213,23 +208,19 @@ public class BasicComponents {
 
    public static void registerCircuits() {
       itemCircuitBasic = new ItemBase("circuitBasic");
-      itemCircuitBasic.setCreativeTab(CreativeTabs.tabMaterials);
       GameRegistry.registerItem(itemCircuitBasic, "circuitBasic");
       RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemCircuitBasic), new Object[]{"!#!", "#@#", "!#!", Character.valueOf('@'), "plateBronze", Character.valueOf('#'), Items.redstone, Character.valueOf('!'), "copperWire"}), CONFIGURATION, true);
       RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemCircuitBasic), new Object[]{"!#!", "#@#", "!#!", Character.valueOf('@'), "plateSteel", Character.valueOf('#'), Items.redstone, Character.valueOf('!'), "copperWire"}), CONFIGURATION, true);
       OreDictionary.registerOre("circuitBasic", itemCircuitBasic);
       itemCircuitAdvanced = new ItemBase("circuitAdvanced");
-      itemCircuitAdvanced.setCreativeTab(CreativeTabs.tabMaterials);
       GameRegistry.registerItem(itemCircuitAdvanced, "circuitAdvanced");
       RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemCircuitAdvanced), new Object[]{"@@@", "#?#", "@@@", Character.valueOf('@'), Items.redstone, Character.valueOf('?'), Items.diamond, Character.valueOf('#'), "circuitBasic"}), CONFIGURATION, true);
       OreDictionary.registerOre("circuitAdvanced", itemCircuitAdvanced);
       itemCircuitElite = new ItemBase("circuitElite");
-      itemCircuitElite.setCreativeTab(CreativeTabs.tabMaterials);
       GameRegistry.registerItem(itemCircuitElite, "circuitElite");
       RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemCircuitAdvanced), new Object[]{"@@@", "?#?", "@@@", Character.valueOf('@'), Items.gold_ingot, Character.valueOf('?'), "circuitAdvanced", Character.valueOf('#'), Blocks.lapis_block}), CONFIGURATION, true);
       OreDictionary.registerOre("circuitElite", itemCircuitElite);
       itemMotor = new ItemBase("motor");
-      itemMotor.setCreativeTab(CreativeTabs.tabMaterials);
       GameRegistry.registerItem(itemMotor, "motor");
       RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemMotor), new Object[]{"@!@", "!#!", "@!@", Character.valueOf('!'), "ingotSteel", Character.valueOf('#'), Items.iron_ingot, Character.valueOf('@'), "copperWire"}), CONFIGURATION, true);
       OreDictionary.registerOre("motor", itemMotor);

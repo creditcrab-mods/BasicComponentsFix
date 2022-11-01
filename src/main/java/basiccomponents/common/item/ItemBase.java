@@ -1,5 +1,6 @@
 package basiccomponents.common.item;
 
+import basiccomponents.common.BCTab;
 import basiccomponents.common.BasicComponents;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
@@ -13,5 +14,6 @@ public class ItemBase extends Item {
       this.setUnlocalizedName("basiccomponents:" + name);
       this.setTextureName("basiccomponents:" + name);
       this.setNoRepair();
+      this.setCreativeTab(BCTab.INSTANCE);
    }
 }

@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
-import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 
@@ -30,7 +29,7 @@ public class ElectricityNetworkHelper {
 
    }
 
-   public static EnumSet getDirections(TileEntity tileEntity) {
+   public static EnumSet<ForgeDirection> getDirections(TileEntity tileEntity) {
       EnumSet possibleSides = EnumSet.noneOf(ForgeDirection.class);
       if(tileEntity instanceof IConnector) {
          for(int i = 0; i < 6; ++i) {
@@ -48,7 +47,7 @@ public class ElectricityNetworkHelper {
       return produceFromMultipleSides(tileEntity, getDirections(tileEntity), electricityPack);
    }
 
-   public static ElectricityPack produceFromMultipleSides(TileEntity tileEntity, EnumSet approachingDirection, ElectricityPack producingPack) {
+   public static ElectricityPack produceFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection, ElectricityPack producingPack) {
       ElectricityPack remainingElectricity = producingPack.clone();
       if(tileEntity != null && approachingDirection != null) {
          List connectedNetworks = getNetworksFromMultipleSides(tileEntity, approachingDirection);
@@ -105,7 +104,7 @@ public class ElectricityNetworkHelper {
       return consumedPack;
    }
 
-   public static List getNetworksFromMultipleSides(TileEntity tileEntity, EnumSet approachingDirection) {
+   public static List<IElectricityNetwork> getNetworksFromMultipleSides(TileEntity tileEntity, EnumSet<ForgeDirection> approachingDirection) {
       ArrayList connectedNetworks = new ArrayList();
 
       for(int i = 0; i < 6; ++i) {
@@ -115,7 +114,7 @@ public class ElectricityNetworkHelper {
             position.modifyPositionFromSide(direction);
             TileEntity outputConductor = position.getTileEntity(tileEntity.getWorldObj());
             IElectricityNetwork electricityNetwork = getNetworkFromTileEntity(outputConductor, direction);
-            if(electricityNetwork != null && !connectedNetworks.contains(connectedNetworks)) {
+            if(electricityNetwork != null && !connectedNetworks.contains(electricityNetwork)) {
                connectedNetworks.add(electricityNetwork);
             }
          }

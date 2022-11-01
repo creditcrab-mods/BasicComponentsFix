@@ -1,5 +1,6 @@
 package basiccomponents.common.block;
 
+import basiccomponents.common.BCTab;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.tileentity.TileEntityCopperWire;
 import net.minecraft.block.Block;
@@ -18,7 +19,7 @@ public class BlockCopperWire extends BlockConductor {
       this.setResistance(0.2F);
       this.setHardness(0.1F);
       this.setBlockBounds(0.3F, 0.3F, 0.3F, 0.7F, 0.7F, 0.7F);
-      this.setCreativeTab(CreativeTabs.tabRedstone);
+      this.setCreativeTab(BCTab.INSTANCE);
       //TODO this
       //Block.setBurnProperties(this.field_71990_ca, 30, 60);
    }

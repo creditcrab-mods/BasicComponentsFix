@@ -2,6 +2,8 @@ package universalelectricity.prefab.potion;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
@@ -15,7 +17,7 @@ public class CustomPotionEffect extends PotionEffect {
       this(potion.getId(), duration, amplifier);
    }
 
-   public CustomPotionEffect(int potionID, int duration, int amplifier, List curativeItems) {
+   public CustomPotionEffect(int potionID, int duration, int amplifier, List<ItemStack> curativeItems) {
       super(potionID, duration, amplifier);
       if(curativeItems == null) {
          this.setCurativeItems(new ArrayList());

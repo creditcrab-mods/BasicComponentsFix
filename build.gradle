@@ -21,7 +21,7 @@ apply plugin: 'maven-publish'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-version = "1.0.2-dirty"
+version = "1.1.0"
 group= "universalelectricity"
 archivesBaseName = "basiccomponents"
 
@@ -30,8 +30,15 @@ minecraft {
     runDir = "run"
 }
 
-dependencies {
+repositories {
+    maven {                                                                                                                                                                               
+                name = "ic2"                                                                                                                                                                  
+                url = "http://maven.ic2.player.to/"                                                                                                                                           
+        }
+}
 
+dependencies {
+    compile 'net.industrial-craft:industrialcraft-2:2.2.660-experimental:dev'
 }
 
 processResources

@@ -1,5 +1,6 @@
 package basiccomponents.common.block;
 
+import basiccomponents.common.BCTab;
 import basiccomponents.common.BasicComponents;
 import basiccomponents.common.tileentity.TileEntityBatteryBox;
 import basiccomponents.common.tileentity.TileEntityCoalGenerator;
@@ -38,7 +39,7 @@ public class BlockBasicMachine extends BlockAdvanced {
    public BlockBasicMachine(int textureIndex) {
       super(UniversalElectricity.machine);
       this.setBlockName("basiccomponents:bcMachine");
-      this.setCreativeTab(CreativeTabs.tabDecorations);
+      this.setCreativeTab(BCTab.INSTANCE);
       this.setStepSound(soundTypeMetal); //TODO Metal Footstep
    }
 

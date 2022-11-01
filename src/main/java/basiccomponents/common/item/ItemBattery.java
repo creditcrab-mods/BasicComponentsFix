@@ -1,5 +1,6 @@
 package basiccomponents.common.item;
 
+import basiccomponents.common.BCTab;
 import basiccomponents.common.BasicComponents;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -13,7 +14,7 @@ public class ItemBattery extends ItemElectric {
    public ItemBattery(String name) {
       super();
       this.setUnlocalizedName("basiccomponents:" + name);
-      this.setCreativeTab(CreativeTabs.tabRedstone);
+      this.setCreativeTab(BCTab.INSTANCE);
    }
 
    @SideOnly(Side.CLIENT)

@@ -49,7 +49,7 @@ public class Region3 {
       this.max.add(difference);
    }
 
-   public List getVectors() {
+   public List<Vector3> getVectors() {
       ArrayList vectors = new ArrayList();
 
       for(int x = this.min.intX(); x < this.max.intX(); ++x) {
@@ -63,7 +63,7 @@ public class Region3 {
       return vectors;
    }
 
-   public List getVectors(Vector3 center, int radius) {
+   public List<Vector3> getVectors(Vector3 center, int radius) {
       ArrayList vectors = new ArrayList();
 
       for(int x = this.min.intX(); x < this.max.intX(); ++x) {
@@ -80,15 +80,15 @@ public class Region3 {
       return vectors;
    }
 
-   public List getEntities(World world, Class entityClass) {
+   public List<Entity> getEntities(World world, Class<? extends Entity> entityClass) {
       return world.getEntitiesWithinAABB(entityClass, this.toAABB());
    }
 
-   public List getEntitiesExlude(World world, Entity entity) {
+   public List<Entity> getEntitiesExlude(World world, Entity entity) {
       return world.getEntitiesWithinAABBExcludingEntity(entity, this.toAABB());
    }
 
-   public List getEntities(World world) {
+   public List<Entity> getEntities(World world) {
       return this.getEntities(world, Entity.class);
    }
 }

@@ -2,6 +2,7 @@ package universalelectricity.prefab.tile;
 
 import java.util.EnumSet;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -26,7 +27,7 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectrical
 
    }
 
-   protected EnumSet getConsumingSides() {
+   protected EnumSet<ForgeDirection> getConsumingSides() {
       return ElectricityNetworkHelper.getDirections(this);
    }
 

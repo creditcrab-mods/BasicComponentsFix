@@ -14,17 +14,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnectionProvider;
 import universalelectricity.core.block.INetworkProvider;
-import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.path.PathfinderChecker;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 
 public class ElectricityNetwork implements IElectricityNetwork {
 
-   private final HashMap producers = new HashMap();
-   private final HashMap consumers = new HashMap();
-   private final Set conductors = new HashSet();
+   private final HashMap<TileEntity, ElectricityPack> producers = new HashMap<>();
+   private final HashMap<TileEntity, ElectricityPack> consumers = new HashMap<>();
+   private final Set<IConductor> conductors = new HashSet<>();
 
 
    public ElectricityNetwork() {}
@@ -172,28 +170,28 @@ public class ElectricityNetwork implements IElectricityNetwork {
       return totalElectricity;
    }
 
-   public HashMap getProducers() {
+   public HashMap<TileEntity, ElectricityPack> getProducers() {
       return this.producers;
    }
 
-   public List getProviders() {
-      ArrayList providers = new ArrayList();
+   public List<TileEntity> getProviders() {
+      ArrayList<TileEntity> providers = new ArrayList<>();
       providers.addAll(this.producers.keySet());
       return providers;
    }
 
-   public HashMap getConsumers() {
+   public HashMap<TileEntity, ElectricityPack> getConsumers() {
       return this.consumers;
    }
 
-   public List getReceivers() {
-      ArrayList receivers = new ArrayList();
+   public List<TileEntity> getReceivers() {
+      ArrayList<TileEntity> receivers = new ArrayList<>();
       receivers.addAll(this.consumers.keySet());
       return receivers;
    }
 
    public void cleanUpConductors() {
-      Iterator it = this.conductors.iterator();
+      Iterator<IConductor> it = this.conductors.iterator();
 
       while(it.hasNext()) {
          IConductor conductor = (IConductor)it.next();
@@ -250,7 +248,7 @@ public class ElectricityNetwork implements IElectricityNetwork {
       return lowestAmp;
    }
 
-   public Set getConductors() {
+   public Set<IConductor> getConductors() {
       return this.conductors;
    }
 
@@ -326,5 +324,16 @@ public class ElectricityNetwork implements IElectricityNetwork {
 
    public String toString() {
       return "ElectricityNetwork[" + this.hashCode() + "|Wires:" + this.conductors.size() + "]";
+   }
+
+   @Override
+   public boolean isInactive() {
+      return conductors.isEmpty();
+   }
+
+   @Override
+   public void tick() {
+      // TODO Auto-generated method stub
+      
    }
 }

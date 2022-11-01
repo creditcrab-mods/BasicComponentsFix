@@ -1,11 +1,10 @@
 package basiccomponents.common.tileentity;
 
-import basiccomponents.common.BasicComponents;
-import com.google.common.io.ByteArrayDataInput;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import mekanism.api.energy.ICableOutputter;
+
 import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -27,7 +26,7 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.tile.TileEntityElectricityStorage;
 
-public class TileEntityBatteryBox extends TileEntityElectricityStorage implements IElectricityStorage, ISidedInventory {
+public class TileEntityBatteryBox extends TileEntityElectricityStorage implements IElectricityStorage, ISidedInventory, ICableOutputter {
 
    private ItemStack[] containingItems = new ItemStack[2];
    public final Set<EntityPlayer> playersUsing = new HashSet();
@@ -245,5 +244,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
       }
 
       return false;
+   }
+
+   @Override
+   public boolean canOutputTo(ForgeDirection side) {
+      return side == ForgeDirection.getOrientation(this.getBlockMetadata() - 4 + 2);
    }
 }

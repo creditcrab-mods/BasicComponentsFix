@@ -2,23 +2,20 @@ package universalelectricity.prefab.tile;
 
 import java.util.Arrays;
 
-import com.google.common.io.ByteArrayDataInput;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
-
+import universalelectricity.compat.CompatHandler;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
@@ -33,7 +30,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
    public void updateConnection(TileEntity tileEntity, ForgeDirection side) {
       if(!this.worldObj.isRemote) {
-         if(tileEntity instanceof IConnector && ((IConnector)tileEntity).canConnect(side.getOpposite())) {
+         if(CompatHandler.canConnect(tileEntity, side.getOpposite())) {
             this.connectedBlocks[side.ordinal()] = tileEntity;
             this.visuallyConnected[side.ordinal()] = true;
             if(tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider) {
@@ -94,7 +91,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
          boolean[] previousConnections = (boolean[])this.visuallyConnected.clone();
 
          for(byte i = 0; i < 6; ++i) {
-            this.updateConnection(VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+            this.updateConnection(VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
          }
 
          if(!Arrays.equals(previousConnections, this.visuallyConnected)) {
@@ -114,7 +111,6 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
       nbt.setBoolean("left", this.visuallyConnected[4]);
       nbt.setBoolean("right", this.visuallyConnected[5]);
       return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, this.getBlockMetadata(), nbt);
-      //return PacketManager.getPacket(this.channel, this, new Object[]{Boolean.valueOf(this.visuallyConnected[0]), Boolean.valueOf(this.visuallyConnected[1]), Boolean.valueOf(this.visuallyConnected[2]), Boolean.valueOf(this.visuallyConnected[3]), Boolean.valueOf(this.visuallyConnected[4]), Boolean.valueOf(this.visuallyConnected[5])});
    }
 
    public IElectricityNetwork getNetwork() {
