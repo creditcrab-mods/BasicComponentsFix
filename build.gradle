@@ -11,7 +11,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.0.+') {
+            changing = true
+        }
     }
 }
 
@@ -21,7 +23,7 @@ apply plugin: 'maven-publish'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-version = "1.1.0"
+version = "1.1.1"
 group= "universalelectricity"
 archivesBaseName = "basiccomponents"
 
@@ -33,27 +35,23 @@ minecraft {
 repositories {
     maven {                                                                                                                                                                               
                 name = "ic2"                                                                                                                                                                  
-                url = "http://maven.ic2.player.to/"                                                                                                                                           
+                url = "https://maven.ic2.player.to/"    
+                metadataSources {
+                    artifact()
+                }                                                                                                                                       
         }
 }
 
 dependencies {
-    compile 'net.industrial-craft:industrialcraft-2:2.2.660-experimental:dev'
+    implementation 'net.industrial-craft:industrialcraft-2:2.2.660-experimental:dev'
 }
 
-processResources
-{
+processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
+    filesMatching('mcmod.info') {
         expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-      
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
     }
 }
 
