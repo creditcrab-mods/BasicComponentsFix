@@ -327,13 +327,39 @@ public class ElectricityNetwork implements IElectricityNetwork {
    }
 
    @Override
-   public boolean isInactive() {
-      return conductors.isEmpty();
+   public void addConnector(IConductor connector) {
+      this.conductors.add(connector);
    }
 
    @Override
-   public void tick() {
-      // TODO Auto-generated method stub
-      
+   public void removeConnector(IConductor connector) {
+      this.conductors.remove(connector);
    }
+
+   @Override
+   public Set<IConductor> getConnectors() {
+      return this.conductors;
+   }
+
+   @Override
+   public void reconstruct() {
+      refreshConductors();
+   }
+
+   @Override
+   public IElectricityNetwork merge(IElectricityNetwork network) {
+      this.mergeConnection(network);
+      return this;
+   }
+
+   @Override
+   public void split(IConductor connection) {
+      splitNetwork(connection);
+   }
+
+   @Override
+   public void split(IConductor connectorA, IConductor connectorB) {
+      // TODO: implement this
+   }
+
 }

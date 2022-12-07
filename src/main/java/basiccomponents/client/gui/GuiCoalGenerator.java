@@ -8,8 +8,9 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import universalelectricity.api.energy.UnitDisplay;
+
 import org.lwjgl.opengl.GL11;
-import universalelectricity.core.electricity.ElectricityDisplay;
 
 @SideOnly(Side.CLIENT)
 public class GuiCoalGenerator extends GuiContainer {
@@ -36,7 +37,7 @@ public class GuiCoalGenerator extends GuiContainer {
       } else if(this.tileEntity.generateWatts < 100.0D) {
          displayText = "Hull Heat: " + (int)(this.tileEntity.generateWatts / 100.0D * 100.0D) + "%";
       } else {
-         displayText = ElectricityDisplay.getDisplay(this.tileEntity.generateWatts, ElectricityDisplay.ElectricUnit.WATT);
+         displayText = UnitDisplay.getDisplay(this.tileEntity.generateWatts, UnitDisplay.Unit.WATT);
       }
 
       this.fontRendererObj.drawString(displayText, (int)(100.0D - (double)displayText.length() * 1.25D), 45, 4210752);

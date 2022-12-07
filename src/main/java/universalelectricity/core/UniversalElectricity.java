@@ -5,6 +5,7 @@ import java.io.File;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.config.Configuration;
+import universalelectricity.api.CompatibilityType;
 
 public class UniversalElectricity {
 
@@ -14,8 +15,8 @@ public class UniversalElectricity {
    public static final String BUILD_VERSION = "117";
    public static final String VERSION = "0.6.2";
    public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
-   public static double UE_IC2_RATIO = 10.0D;
-   public static double UE_RF_RATIO = 2.5D;
+   public static double UE_IC2_RATIO = CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio;
+   public static double UE_RF_RATIO = CompatibilityType.REDSTONE_FLUX.reciprocal_ratio;
    public static boolean isVoltageSensitive = false;
    public static boolean isNetworkActive = false;
    public static final Material machine = new Material(MapColor.ironColor);

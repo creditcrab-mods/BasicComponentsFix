@@ -1,11 +1,17 @@
 package universalelectricity.core.block;
 
-import universalelectricity.core.block.IConnectionProvider;
-import universalelectricity.core.block.INetworkProvider;
+import net.minecraftforge.common.util.ForgeDirection;
+import universalelectricity.api.net.IConnector;
+import universalelectricity.core.electricity.IElectricityNetwork;
 
-public interface IConductor extends INetworkProvider, IConnectionProvider {
+public interface IConductor extends INetworkProvider, IConnectionProvider, IConnector<IElectricityNetwork> {
 
    double getResistance();
 
    double getCurrentCapcity();
+
+   @Override
+   default IConnector<IElectricityNetwork> getInstance(ForgeDirection dir) {
+      return this;
+   }
 }

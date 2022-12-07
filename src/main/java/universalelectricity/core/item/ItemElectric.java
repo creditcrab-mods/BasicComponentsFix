@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import universalelectricity.core.electricity.ElectricityDisplay;
+import universalelectricity.api.energy.UnitDisplay;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.IItemElectric;
@@ -32,7 +32,7 @@ public abstract class ItemElectric extends Item implements IItemElectric {
          color = "§6";
       }
 
-      list.add(color + ElectricityDisplay.getDisplay(joules, ElectricityDisplay.ElectricUnit.JOULES) + "/" + ElectricityDisplay.getDisplay(this.getMaxJoules(itemStack), ElectricityDisplay.ElectricUnit.JOULES));
+      list.add(color + UnitDisplay.getDisplay(joules, UnitDisplay.Unit.JOULES) + "/" + UnitDisplay.getDisplay(this.getMaxJoules(itemStack), UnitDisplay.Unit.JOULES));
    }
 
    public void onCreated(ItemStack itemStack, World par2World, EntityPlayer par3EntityPlayer) {

@@ -12,7 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import universalelectricity.core.electricity.ElectricityDisplay;
+import universalelectricity.api.energy.UnitDisplay;
 
 public class ItemBlockCopperWire extends ItemBlock {
 
@@ -38,7 +38,7 @@ public class ItemBlockCopperWire extends ItemBlock {
    }
 
    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-      par3List.add("Resistance: " + ElectricityDisplay.getDisplay(TileEntityCopperWire.RESISTANCE, ElectricityDisplay.ElectricUnit.RESISTANCE));
-      par3List.add("Max Amps: " + ElectricityDisplay.getDisplay(TileEntityCopperWire.MAX_AMPS, ElectricityDisplay.ElectricUnit.AMPERE));
+      par3List.add("Resistance: " + UnitDisplay.getDisplay(TileEntityCopperWire.RESISTANCE, UnitDisplay.Unit.RESISTANCE));
+      par3List.add("Max Amps: " + UnitDisplay.getDisplay(TileEntityCopperWire.MAX_AMPS, UnitDisplay.Unit.AMPERE));
    }
 }

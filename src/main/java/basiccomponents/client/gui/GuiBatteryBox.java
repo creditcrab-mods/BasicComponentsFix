@@ -8,8 +8,9 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import universalelectricity.api.energy.UnitDisplay;
+
 import org.lwjgl.opengl.GL11;
-import universalelectricity.core.electricity.ElectricityDisplay;
 
 @SideOnly(Side.CLIENT)
 public class GuiBatteryBox extends GuiContainer {
@@ -27,8 +28,8 @@ public class GuiBatteryBox extends GuiContainer {
    @Override
    protected void drawGuiContainerForegroundLayer(int par1, int par2) {
       this.fontRendererObj.drawString(this.tileEntity.getInventoryName(), 65, 6, 4210752);
-      String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getJoules(), ElectricityDisplay.ElectricUnit.JOULES);
-      String displayMaxJoules = ElectricityDisplay.getDisplay(this.tileEntity.getMaxJoules(), ElectricityDisplay.ElectricUnit.JOULES);
+      String displayJoules = UnitDisplay.getDisplayShort(this.tileEntity.getJoules(), UnitDisplay.Unit.JOULES);
+      String displayMaxJoules = UnitDisplay.getDisplay(this.tileEntity.getMaxJoules(), UnitDisplay.Unit.JOULES);
       if(this.tileEntity.isDisabled()) {
          displayMaxJoules = "Disabled";
       }

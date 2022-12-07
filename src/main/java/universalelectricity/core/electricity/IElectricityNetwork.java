@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
+import universalelectricity.api.net.INetwork;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnectionProvider;
 
-public interface IElectricityNetwork {
+public interface IElectricityNetwork extends INetwork<IElectricityNetwork, IConductor> {
 
    void startProducing(TileEntity var1, ElectricityPack var2);
 
@@ -54,9 +55,5 @@ public interface IElectricityNetwork {
    void mergeConnection(IElectricityNetwork var1);
 
    void splitNetwork(IConnectionProvider var1);
-
-   boolean isInactive();
-
-   void tick();
    
 }

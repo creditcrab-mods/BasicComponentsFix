@@ -8,8 +8,9 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import universalelectricity.api.energy.UnitDisplay;
+
 import org.lwjgl.opengl.GL11;
-import universalelectricity.core.electricity.ElectricityDisplay;
 
 @SideOnly(Side.CLIENT)
 public class GuiElectricFurnace extends GuiContainer {
@@ -39,8 +40,8 @@ public class GuiElectricFurnace extends GuiContainer {
       }
 
       this.fontRendererObj.drawString("Status: " + displayText, 82, 45, 4210752);
-      this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(10000.0D, ElectricityDisplay.ElectricUnit.WATT), 82, 56, 4210752);
-      this.fontRendererObj.drawString(ElectricityDisplay.getDisplay(this.tileEntity.getVoltage(), ElectricityDisplay.ElectricUnit.VOLTAGE), 82, 68, 4210752);
+      this.fontRendererObj.drawString(UnitDisplay.getDisplay(10000.0D, UnitDisplay.Unit.WATT), 82, 56, 4210752);
+      this.fontRendererObj.drawString(UnitDisplay.getDisplay(this.tileEntity.getVoltage(), UnitDisplay.Unit.VOLTAGE), 82, 68, 4210752);
       this.fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
    }
 

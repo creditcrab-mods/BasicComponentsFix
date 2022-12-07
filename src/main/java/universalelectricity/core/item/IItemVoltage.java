@@ -1,8 +1,7 @@
 package universalelectricity.core.item;
 
-import net.minecraft.item.ItemStack;
+import universalelectricity.api.item.IVoltageItem;
 
-public interface IItemVoltage {
+public interface IItemVoltage extends IVoltageItem {
 
-   double getVoltage(ItemStack var1);
 }
