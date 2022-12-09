@@ -9,6 +9,7 @@ import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.api.CompatibilityModule;
+import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.electricity.IElectricityNetwork;
@@ -26,7 +27,8 @@ public class ElectricTileDriver {
         ElectricityNetworkHelper.invalidate(handler);
     }
 
-    public void tick() {
+    public boolean tick() {
+        if (handler.isInvalid()) return false;
         Map<ForgeDirection, IElectricityNetwork> networks = getNetworks();
         Set<ForgeDirection> inputSides = new HashSet<>();
         if (CompatibilityModule.canReceive(handler, ForgeDirection.UNKNOWN)) {
@@ -35,6 +37,7 @@ public class ElectricTileDriver {
         if (CompatibilityModule.canExtract(handler, ForgeDirection.UNKNOWN)) {
             produce(networks, inputSides);
         }
+        return networks.size() > 0;
     }
 
     public Set<ForgeDirection> consume(Map<ForgeDirection, IElectricityNetwork> networks) {
@@ -50,7 +53,7 @@ public class ElectricTileDriver {
                     inputSides.add(side);
                     net.startRequesting(handler, wattsPerSide / voltage, voltage);
                     ElectricityPack receivedPack = net.consumeElectricity(handler);
-                    if (receivedPack.voltage > voltage) {
+                    if (receivedPack.voltage > voltage && UniversalElectricity.isVoltageSensitive) {
                         handler.getWorldObj().createExplosion(null, handler.xCoord, handler.yCoord, handler.zCoord, 1, true);
                         return EnumSet.allOf(ForgeDirection.class);
                     }

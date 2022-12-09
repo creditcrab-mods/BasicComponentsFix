@@ -11,8 +11,10 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
+import universalelectricity.compat.CompatHandler;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.core.block.ISelfDriven;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.IElectricityNetwork;
@@ -34,6 +36,8 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
             this.visuallyConnected[side.ordinal()] = true;
             if(tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider) {
                this.getNetwork().mergeConnection(((INetworkProvider)tileEntity).getNetwork());
+            } else if (!(tileEntity instanceof ISelfDriven)) {
+               CompatHandler.registerTile(tileEntity);
             }
 
             return;

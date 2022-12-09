@@ -17,7 +17,7 @@ public class UniversalElectricity {
    public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity.cfg"));
    public static double UE_IC2_RATIO = CompatibilityType.INDUSTRIALCRAFT.reciprocal_ratio;
    public static double UE_RF_RATIO = CompatibilityType.REDSTONE_FLUX.reciprocal_ratio;
-   public static boolean isVoltageSensitive = false;
+   public static boolean isVoltageSensitive = true;
    public static boolean isNetworkActive = false;
    public static final Material machine = new Material(MapColor.ironColor);
 
