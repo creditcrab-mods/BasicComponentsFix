@@ -2,6 +2,8 @@ package basiccomponents.common.tileentity;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import mekanism.api.energy.ICableOutputter;
+import mekanism.api.energy.IStrictEnergyAcceptor;
+import mekanism.api.energy.IStrictEnergyStorage;
 
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -26,7 +28,7 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.tile.TileEntityElectricityStorage;
 
-public class TileEntityBatteryBox extends TileEntityElectricityStorage implements IElectricityStorage, ISidedInventory, ICableOutputter {
+public class TileEntityBatteryBox extends TileEntityElectricityStorage implements IElectricityStorage, ISidedInventory, ICableOutputter, IStrictEnergyStorage, IStrictEnergyAcceptor {
 
    private ItemStack[] containingItems = new ItemStack[2];
    public final Set<EntityPlayer> playersUsing = new HashSet();
@@ -244,6 +246,34 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
       }
 
       return false;
+   }
+
+   @Override
+   public double transferEnergyToAcceptor(ForgeDirection side, double amount) {
+      if (!canReceiveEnergy(side)) return 0;
+      double toUse = Math.min(getMaxEnergy()-getEnergy(), amount);
+      setEnergy(toUse + getEnergy());
+      return toUse;
+   }
+
+   @Override
+	public boolean canReceiveEnergy(ForgeDirection side) {
+      return getConsumingSides().contains(side);
+   }
+
+   @Override
+   public double getEnergy() {
+      return getJoules();
+   }
+
+   @Override
+	public void setEnergy(double energy) {
+      setJoules(energy);
+   }
+
+   @Override
+	public double getMaxEnergy() {
+      return getMaxJoules();
    }
 
    @Override

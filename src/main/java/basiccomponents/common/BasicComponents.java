@@ -40,7 +40,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import universalelectricity.compat.CompatHandler;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.prefab.RecipeHelper;
@@ -49,12 +48,12 @@ import universalelectricity.prefab.ore.OreGenBase;
 import universalelectricity.prefab.ore.OreGenReplaceStone;
 import universalelectricity.prefab.ore.OreGenerator;
 
-@Mod(modid = BasicComponents.MODID, name = BasicComponents.NAME, version = BasicComponents.VERSION)
+@Mod(modid = BasicComponents.MODID, name = BasicComponents.NAME, version = BasicComponents.VERSION, dependencies = "required-after:universalelectricity")
 public class BasicComponents {
 
    public static final String NAME = "Basic Components";
    public static final String MODID = "basiccomponents";
-   public static final String VERSION = "1.0.0-dirty";
+   public static final String VERSION = "{VERSION}";
    public static String CHANNEL = "";
    public static final String RESOURCE_PATH = "/mods/basiccomponents/";
    public static CommonProxy proxy;
@@ -120,8 +119,6 @@ public class BasicComponents {
       registerCircuits();
       registerMachines();
       CONFIGURATION.save();
-      CompatHandler.initCompatHandlers();
-      
    }
 
    @Mod.EventHandler
