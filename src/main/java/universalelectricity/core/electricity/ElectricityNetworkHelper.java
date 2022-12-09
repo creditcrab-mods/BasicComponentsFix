@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import universalelectricity.api.CompatibilityModule;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.vector.Vector3;
@@ -136,4 +137,15 @@ public class ElectricityNetworkHelper {
 
       return null;
    }
+
+   public static boolean canConnect(TileEntity tileEntity, ForgeDirection side, TileEntity source) {
+      if (tileEntity == null) {
+         return false;
+      } else if (tileEntity instanceof IConnector) {
+         return ((IConnector)tileEntity).canConnect(side, source);
+      } else {
+         return CompatibilityModule.canConnect(tileEntity, side, source);
+      }
+   }
+
 }

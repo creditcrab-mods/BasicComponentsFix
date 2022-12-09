@@ -1,16 +1,6 @@
 package universalelectricity.compat.ic2;
 
-import universalelectricity.core.UniversalElectricity;
-
 public class IC2CompatHelper {
-    
-    public static double EUToJoules(double eu) {
-        return eu * UniversalElectricity.UE_IC2_RATIO;
-    }
-
-    public static double joulesToEU(double joules) {
-        return joules / UniversalElectricity.UE_IC2_RATIO;
-    }
 
     public static int voltToTier(double volt) {
         if (volt <= 120.0) return 1;

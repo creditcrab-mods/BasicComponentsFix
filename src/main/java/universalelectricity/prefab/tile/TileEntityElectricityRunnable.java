@@ -12,6 +12,18 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectrical
    public double prevWatts;
    public double wattsReceived = 0.0D;
 
+   /*@Override                                                                                                                                                                                 
+    public void initiate() {                                                                                                                                                                  
+        super.initiate();                                                                                                                                                                     
+        MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));                                                                                                                         
+    }                                                                                                                                                                                         
+                                                                                                                                                                                              
+    @Override                                                                                                                                                                                 
+    public void invalidate() {                                                                                                                                                                
+        MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));                                                                                                                       
+        super.invalidate();                                                                                                                                                                   
+    }*/
+
    @Override
    public void updateEntity() {
       super.updateEntity();
@@ -46,4 +58,33 @@ public abstract class TileEntityElectricityRunnable extends TileEntityElectrical
    public double getWattBuffer() {
       return this.getRequest().getWatts() * 2.0D;
    }
+
+   //IC2 START
+
+  /* @Override
+   public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
+      return getConsumingSides().contains(direction);
+   }
+
+   @Override
+   public double getDemandedEnergy() {
+      return Math.ceil(this.getRequest().getWatts() * UniversalElectricity.TO_IC2_RATIO);
+   }
+
+   @Override
+    public int getSinkTier() {
+        return 32;
+    }
+
+    @Override
+    public double injectEnergy(ForgeDirection direction, double i, double voltage) {
+        double givenElectricity = (double)i * UniversalElectricity.IC2_RATIO;
+        double rejects = 0.0;
+        if (givenElectricity > this.getWattBuffer()) {
+            rejects = givenElectricity - this.getRequest().getWatts();
+        }
+        this.onReceive(new ElectricityPack(givenElectricity / this.getVoltage(), this.getVoltage()));
+        return (rejects * UniversalElectricity.TO_IC2_RATIO);
+    }*/
+
 }

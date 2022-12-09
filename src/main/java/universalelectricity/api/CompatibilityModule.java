@@ -52,11 +52,11 @@ public abstract class CompatibilityModule
 	 * 
 	 * @return The actual energy that was extract.
 	 */
-	public static double extractEnergy(Object handler, ForgeDirection direction, double energy, boolean doReceive)
+	public static double extractEnergy(Object handler, ForgeDirection direction, double energy, boolean doExtract)
 	{
 		if (isHandler(handler))
 		{
-			return energyHandlerCache.get(handler.getClass()).doExtractEnergy(handler, direction, energy, doReceive);
+			return energyHandlerCache.get(handler.getClass()).doExtractEnergy(handler, direction, energy, doExtract);
 		}
 
 		return 0;
@@ -192,11 +192,21 @@ public abstract class CompatibilityModule
 		return 0;
 	}
 
-	public static double getVoltage(Object handler)
+	public static double getInputVoltage(Object handler)
 	{
 		if (isHandler(handler))
 		{
-			return energyHandlerCache.get(handler.getClass()).doGetVoltage(handler);
+			return energyHandlerCache.get(handler.getClass()).doGetInputVoltage(handler);
+		}
+
+		return 0;
+	}
+
+	public static double getOutputVoltage(Object handler)
+	{
+		if (isHandler(handler))
+		{
+			return energyHandlerCache.get(handler.getClass()).doGetOutputVoltage(handler);
 		}
 
 		return 0;
@@ -302,7 +312,9 @@ public abstract class CompatibilityModule
 
 	public abstract double doGetMaxEnergyItem(ItemStack is);
 
-	public abstract double doGetVoltage(Object handler);
+	public abstract double doGetInputVoltage(Object handler);
+
+	public abstract double doGetOutputVoltage(Object handler);
 
 	public abstract boolean doCanReceive(Object handler, ForgeDirection side);
 

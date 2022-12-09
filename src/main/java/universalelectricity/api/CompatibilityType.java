@@ -70,4 +70,13 @@ public enum CompatibilityType
 
 		return null;
 	}
+
+	public double fromJoules(double joules) {
+		return this.ratio * joules;
+	}
+
+	public double toJoules(double energy) {
+		return this.reciprocal_ratio * energy;
+	}
+
 }

@@ -11,7 +11,6 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.compat.CompatHandler;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.electricity.ElectricityNetwork;
@@ -30,7 +29,7 @@ public abstract class TileEntityConductor extends TileEntityAdvanced implements 
 
    public void updateConnection(TileEntity tileEntity, ForgeDirection side) {
       if(!this.worldObj.isRemote) {
-         if(CompatHandler.canConnect(tileEntity, side.getOpposite())) {
+         if(ElectricityNetworkHelper.canConnect(tileEntity, side.getOpposite(), this)) {
             this.connectedBlocks[side.ordinal()] = tileEntity;
             this.visuallyConnected[side.ordinal()] = true;
             if(tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider) {
