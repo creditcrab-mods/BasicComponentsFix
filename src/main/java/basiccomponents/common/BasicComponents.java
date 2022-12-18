@@ -215,7 +215,7 @@ public class BasicComponents {
       OreDictionary.registerOre("circuitAdvanced", itemCircuitAdvanced);
       itemCircuitElite = new ItemBase("circuitElite");
       GameRegistry.registerItem(itemCircuitElite, "circuitElite");
-      RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemCircuitAdvanced), new Object[]{"@@@", "?#?", "@@@", Character.valueOf('@'), Items.gold_ingot, Character.valueOf('?'), "circuitAdvanced", Character.valueOf('#'), Blocks.lapis_block}), CONFIGURATION, true);
+      RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemCircuitElite), new Object[]{"@@@", "?#?", "@@@", Character.valueOf('@'), Items.gold_ingot, Character.valueOf('?'), "circuitAdvanced", Character.valueOf('#'), Blocks.lapis_block}), CONFIGURATION, true);
       OreDictionary.registerOre("circuitElite", itemCircuitElite);
       itemMotor = new ItemBase("motor");
       GameRegistry.registerItem(itemMotor, "motor");
