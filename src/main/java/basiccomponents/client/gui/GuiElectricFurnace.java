@@ -40,8 +40,8 @@ public class GuiElectricFurnace extends GuiContainer {
       }
 
       this.fontRendererObj.drawString("Status: " + displayText, 82, 45, 4210752);
-      this.fontRendererObj.drawString(UnitDisplay.getDisplay(10000.0D, UnitDisplay.Unit.WATT), 82, 56, 4210752);
-      this.fontRendererObj.drawString(UnitDisplay.getDisplay(this.tileEntity.getVoltage(), UnitDisplay.Unit.VOLTAGE), 82, 68, 4210752);
+      this.fontRendererObj.drawString(tileEntity.RF_PER_TICK + " RF/t", 82, 56, 4210752);
+      this.fontRendererObj.drawString(tileEntity.energyStorage.getEnergyStored() + " RF", 82, 68, 4210752);
       this.fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
    }
 

@@ -1,6 +1,7 @@
 package basiccomponents.common.container;
 
 import basiccomponents.common.tileentity.TileEntityElectricFurnace;
+import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -18,7 +19,7 @@ public class ContainerElectricFurnace extends Container {
 
    public ContainerElectricFurnace(InventoryPlayer par1InventoryPlayer, TileEntityElectricFurnace tileEntity) {
       this.tileEntity = tileEntity;
-      this.addSlotToContainer(new SlotSpecific(tileEntity, 0, 55, 49, new Class[]{IItemElectric.class}));
+      this.addSlotToContainer(new SlotSpecific(tileEntity, 0, 55, 49, new Class[]{IEnergyContainerItem.class}));
       this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25));
       this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25));
 
@@ -58,7 +59,7 @@ public class ContainerElectricFurnace extends Container {
 
             var3.onSlotChange(var4, var2);
          } else if(par1 != 1 && par1 != 0) {
-            if(var4.getItem() instanceof IItemElectric) {
+            if(var4.getItem() instanceof IEnergyContainerItem) {
                if(!this.mergeItemStack(var4, 0, 1, false)) {
                   return null;
                }

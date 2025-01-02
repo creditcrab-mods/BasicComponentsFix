@@ -1,6 +1,7 @@
 package basiccomponents.common.tileentity;
 
 import basiccomponents.common.BasicComponents;
+import cofh.api.energy.IEnergyContainerItem;
 import com.google.common.io.ByteArrayDataInput;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import java.util.HashSet;
@@ -21,23 +22,29 @@ import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.IItemElectric;
+import universalelectricity.core.item.RFItemHelper;
 import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
+import universalelectricity.prefab.tile.TileEntityRFUser;
 
-public class TileEntityElectricFurnace extends TileEntityElectricityRunnable implements IInventory, ISidedInventory {
+public class TileEntityElectricFurnace extends TileEntityRFUser implements IInventory, ISidedInventory {
 
-   public static final double WATTS_PER_TICK = 500.0D;
+   public static final int RF_PER_TICK = 200;
    public static final int PROCESS_TIME_REQUIRED = 130;
    public int processTicks = 0;
    private ItemStack[] containingItems = new ItemStack[3];
    public final Set<EntityPlayer> playersUsing = new HashSet();
 
+   public TileEntityElectricFurnace() {
+      super(208000, Integer.MAX_VALUE, Integer.MAX_VALUE);
+   }
+
    @Override
    public void updateEntity() {
       super.updateEntity();
-      super.wattsReceived += ElectricItemHelper.dechargeItem(this.containingItems[0], 500.0D, this.getVoltage());
+      energyStorage.receiveEnergy(RFItemHelper.extractEnergyFromContainer(this.containingItems[0],energyStorage.getMaxReceive(),false),false);
       if(!this.worldObj.isRemote) {
          if(this.canProcess()) {
-            if(super.wattsReceived >= 500.0D) {
+            if(super.energyStorage.getEnergyStored() >= RF_PER_TICK) {
                if(this.processTicks == 0) {
                   this.processTicks = 130;
                } else if(this.processTicks > 0) {
@@ -53,7 +60,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
                this.processTicks = 0;
             }
 
-            super.wattsReceived = Math.max(super.wattsReceived - 125.0D, 0.0D);
+            super.energyStorage.extractEnergy(RF_PER_TICK,false);
          } else {
             this.processTicks = 0;
          }
@@ -74,15 +81,13 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
       return direction == ForgeDirection.getOrientation(this.getBlockMetadata() - 8 + 2);
    }
 
-   public ElectricityPack getRequest() {
-      return this.canProcess()?new ElectricityPack(500.0D / this.getVoltage(), this.getVoltage()):new ElectricityPack();
-   }
 
    @Override
    public Packet getDescriptionPacket() {
       NBTTagCompound nbt = new NBTTagCompound();
       nbt.setInteger("processTicks", this.processTicks);
       nbt.setInteger("disabledTicks", super.disabledTicks);
+      energyStorage.writeToNBT(nbt);
       return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, getBlockMetadata(), nbt);
       //return PacketManager.getPacket(BasicComponents.CHANNEL, this, new Object[]{Integer.valueOf(this.processTicks), Integer.valueOf(super.disabledTicks)});
    }
@@ -93,6 +98,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
          NBTTagCompound nbt = pkt.func_148857_g();
          this.processTicks = nbt.getInteger("processTicks");
          super.disabledTicks = nbt.getInteger("disabledTicks");
+         energyStorage.readFromNBT(nbt);
       }
    }
 
@@ -249,7 +255,7 @@ public class TileEntityElectricFurnace extends TileEntityElectricityRunnable imp
    }
 
    public boolean isItemValidForSlot(int slotID, ItemStack itemStack) {
-      return slotID == 1?FurnaceRecipes.smelting().getSmeltingResult(itemStack) != null:(slotID == 0?itemStack.getItem() instanceof IItemElectric:false);
+      return slotID == 1?FurnaceRecipes.smelting().getSmeltingResult(itemStack) != null:(slotID == 0?itemStack.getItem() instanceof IEnergyContainerItem :false);
    }
 
    public int[] getAccessibleSlotsFromSide(int side) {

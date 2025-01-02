@@ -2,13 +2,15 @@ package basiccomponents.common.item;
 
 import basiccomponents.common.item.ItemBase;
 import java.util.List;
+
+import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.IItemElectric;
 
-public class ItemInfiniteBattery extends ItemBase implements IItemElectric {
+public class ItemInfiniteBattery extends ItemBase implements IEnergyContainerItem {
 
    public ItemInfiniteBattery(String name) {
       super(name);
@@ -20,33 +22,24 @@ public class ItemInfiniteBattery extends ItemBase implements IItemElectric {
       par3List.add("§2Infinite");
    }
 
-   public double getJoules(ItemStack itemStack) {
-      return this.getMaxJoules(itemStack);
+
+   @Override
+   public int receiveEnergy(ItemStack itemStack, int i, boolean b) {
+      return Integer.MAX_VALUE;
    }
 
-   public void setJoules(double joules, ItemStack itemStack) {}
-
-   public double getMaxJoules(ItemStack itemStack) {
-      return Double.POSITIVE_INFINITY;
+   @Override
+   public int extractEnergy(ItemStack itemStack, int i, boolean b) {
+      return Integer.MAX_VALUE;
    }
 
-   public double getVoltage(ItemStack itemStack) {
-      return 25.0D;
+   @Override
+   public int getEnergyStored(ItemStack itemStack) {
+      return -1;
    }
 
-   public ElectricityPack onReceive(ElectricityPack electricityPack, ItemStack itemStack) {
-      return electricityPack;
-   }
-
-   public ElectricityPack onProvide(ElectricityPack electricityPack, ItemStack itemStack) {
-      return electricityPack;
-   }
-
-   public ElectricityPack getReceiveRequest(ItemStack itemStack) {
-      return new ElectricityPack(Double.POSITIVE_INFINITY, this.getVoltage(itemStack));
-   }
-
-   public ElectricityPack getProvideRequest(ItemStack itemStack) {
-      return new ElectricityPack(Double.POSITIVE_INFINITY, this.getVoltage(itemStack));
+   @Override
+   public int getMaxEnergyStored(ItemStack itemStack) {
+      return -1;
    }
 }

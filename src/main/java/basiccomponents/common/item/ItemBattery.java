@@ -1,20 +1,22 @@
 package basiccomponents.common.item;
 
 import basiccomponents.common.BCTab;
-import basiccomponents.common.BasicComponents;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import universalelectricity.core.item.ItemElectric;
+import universalelectricity.api.item.ItemRF;
 
-public class ItemBattery extends ItemElectric {
+
+public class ItemBattery extends ItemRF {
 
    public ItemBattery(String name) {
       super();
       this.setUnlocalizedName("basiccomponents:" + name);
       this.setCreativeTab(BCTab.INSTANCE);
+      this.CAPACITY = 400000;
+      this.SEND = 320;
+      this.RECEIVE = 320;
    }
 
    @SideOnly(Side.CLIENT)
