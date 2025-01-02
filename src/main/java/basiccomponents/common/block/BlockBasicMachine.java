@@ -7,6 +7,8 @@ import basiccomponents.common.tileentity.TileEntityCoalGenerator;
 import basiccomponents.common.tileentity.TileEntityElectricFurnace;
 import java.util.List;
 import java.util.Random;
+
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
@@ -22,6 +24,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.block.BlockAdvanced;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
+import universalelectricity.prefab.tile.TileEntityRFProducer;
 
 public class BlockBasicMachine extends BlockAdvanced {
 
@@ -123,6 +127,11 @@ public class BlockBasicMachine extends BlockAdvanced {
       } else {
          return this.blockIcon;
       }
+   }
+
+   @Override
+   public void onNeighborBlockChange(World worldIn, int x, int y, int z, Block neighbor) {
+      ((TileEntityAdvanced)worldIn.getTileEntity(x,y,z)).onNeighborChange();
    }
 
    @Override

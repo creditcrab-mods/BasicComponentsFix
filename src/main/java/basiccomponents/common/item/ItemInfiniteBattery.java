@@ -19,7 +19,7 @@ public class ItemInfiniteBattery extends ItemBase implements IEnergyContainerIte
    }
 
    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-      par3List.add("§2Infinite");
+      par3List.add("§2Infinite RF");
    }
 
 

@@ -8,6 +8,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import universalelectricity.api.energy.RFDisplay;
 import universalelectricity.api.energy.UnitDisplay;
 
 import org.lwjgl.opengl.GL11;
@@ -32,16 +33,15 @@ public class GuiCoalGenerator extends GuiContainer {
       String displayText = "";
       if(this.tileEntity.isDisabled()) {
          displayText = "Disabled";
-      } else if(this.tileEntity.generateWatts <= 0.0D) {
+      } else if(this.tileEntity.prevRF <= 0) {
          displayText = "Not Generating";
-      } else if(this.tileEntity.generateWatts < 100.0D) {
-         displayText = "Hull Heat: " + (int)(this.tileEntity.generateWatts / 100.0D * 100.0D) + "%";
-      } else {
-         displayText = UnitDisplay.getDisplay(this.tileEntity.generateWatts, UnitDisplay.Unit.WATT);
+      }
+      else {
+         displayText = tileEntity.prevRF + " RF/t";
       }
 
       this.fontRendererObj.drawString(displayText, (int)(100.0D - (double)displayText.length() * 1.25D), 45, 4210752);
-      this.fontRendererObj.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 85, 60, 4210752);
+      this.fontRendererObj.drawString("Maximum Output: " + tileEntity.MAX_GENERATE_RF + " RF/t", 8, 60, 4210752);
       this.fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
    }
 
