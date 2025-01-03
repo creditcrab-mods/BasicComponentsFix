@@ -42,6 +42,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.item.ElectricItemHelper;
+import universalelectricity.core.item.RFItemHelper;
 import universalelectricity.prefab.RecipeHelper;
 import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.ore.OreGenBase;
@@ -235,7 +236,7 @@ public class BasicComponents {
       itemBattery = new ItemBattery("battery");
       GameRegistry.registerItem(itemBattery, "battery");
       RecipeHelper.addRecipe(new ShapedOreRecipe(new ItemStack(itemBattery), new Object[]{" T ", "TRT", "TCT", Character.valueOf('T'), "ingotTin", Character.valueOf('R'), Items.redstone, Character.valueOf('C'), Items.coal}), CONFIGURATION, true);
-      OreDictionary.registerOre("battery", ElectricItemHelper.getUncharged(itemBattery));
+      OreDictionary.registerOre("battery", RFItemHelper.setDefaultEnergyTag(new ItemStack(itemBattery),0));
 
    }
 
@@ -298,6 +299,7 @@ public class BasicComponents {
       OreDictionary.registerOre("coalGenerator", generator.copy());
       OreDictionary.registerOre("batteryBox", bbox.copy());
       OreDictionary.registerOre("electricFurnace", efurnace.copy());
+      //TODO: Fix Battery Box Recipe
       RecipeHelper.addRecipe(new ShapedOreRecipe(bbox.copy(), new Object[]{"SSS", "BBB", "SSS", Character.valueOf('B'), "battery", Character.valueOf('S'), "ingotSteel"}), CONFIGURATION, true);
       RecipeHelper.addRecipe(new ShapedOreRecipe(generator.copy(), new Object[]{"MMM", "MOM", "MCM", Character.valueOf('M'), "ingotSteel", Character.valueOf('C'), "motor", Character.valueOf('O'), Blocks.furnace}), CONFIGURATION, true);
       RecipeHelper.addRecipe(new ShapedOreRecipe(generator.copy(), new Object[]{"MMM", "MOM", "MCM", Character.valueOf('M'), "ingotBronze", Character.valueOf('C'), "motor", Character.valueOf('O'), Blocks.furnace}), CONFIGURATION, true);

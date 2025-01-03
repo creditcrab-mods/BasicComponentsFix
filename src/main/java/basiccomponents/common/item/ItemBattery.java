@@ -14,7 +14,7 @@ public class ItemBattery extends ItemRF {
       super();
       this.setUnlocalizedName("basiccomponents:" + name);
       this.setCreativeTab(BCTab.INSTANCE);
-      this.CAPACITY = 400000;
+      this.CAPACITY = 500000;
       this.SEND = 320;
       this.RECEIVE = 320;
    }
