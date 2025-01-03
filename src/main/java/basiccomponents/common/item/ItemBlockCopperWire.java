@@ -38,7 +38,6 @@ public class ItemBlockCopperWire extends ItemBlock {
    }
 
    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-      par3List.add("Resistance: " + UnitDisplay.getDisplay(TileEntityCopperWire.RESISTANCE, UnitDisplay.Unit.RESISTANCE));
-      par3List.add("Max Amps: " + UnitDisplay.getDisplay(TileEntityCopperWire.MAX_AMPS, UnitDisplay.Unit.AMPERE));
+      par3List.add("Non Functional" );
    }
 }

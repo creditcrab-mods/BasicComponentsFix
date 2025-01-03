@@ -21,6 +21,7 @@ public class RenderCopperWire extends TileEntitySpecialRenderer {
       GL11.glPushMatrix();
       GL11.glTranslatef((float)d + 0.5F, (float)d1 + 1.5F, (float)d2 + 0.5F);
       GL11.glScalef(1.0F, -1.0F, -1.0F);
+      /*
       if(tileEntity.visuallyConnected[0]) {
          model.renderBottom();
       }
@@ -45,6 +46,7 @@ public class RenderCopperWire extends TileEntitySpecialRenderer {
          model.renderRight();
       }
 
+       */
       model.renderMiddle();
       GL11.glPopMatrix();
    }
