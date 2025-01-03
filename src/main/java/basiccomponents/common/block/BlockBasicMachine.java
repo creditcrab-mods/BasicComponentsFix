@@ -208,6 +208,7 @@ public class BlockBasicMachine extends BlockAdvanced {
       }
 
       par1World.setBlockMetadataWithNotify(x, y, z, change, 3);
+      ((TileEntityAdvanced)par1World.getTileEntity(x,y,z)).onNeighborChange();
       return true;
    }
 
@@ -246,7 +247,9 @@ public class BlockBasicMachine extends BlockAdvanced {
 
    @Override
    public TileEntity createTileEntity(World var1, int meta) {
-      return createNewTileEntity(var1, meta);
+      TileEntity te = createNewTileEntity(var1, meta);
+      //((TileEntityAdvanced)te).onNeighborChange();
+      return te;
    }
 
    @Override

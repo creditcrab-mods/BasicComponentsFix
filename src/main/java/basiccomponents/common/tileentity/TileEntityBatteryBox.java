@@ -1,9 +1,8 @@
 package basiccomponents.common.tileentity;
 
+import cofh.api.energy.IEnergyReceiver;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import mekanism.api.energy.ICableOutputter;
-import mekanism.api.energy.IStrictEnergyAcceptor;
-import mekanism.api.energy.IStrictEnergyStorage;
+
 
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -19,44 +18,94 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import universalelectricity.core.block.IElectricityStorage;
-import universalelectricity.core.electricity.ElectricityNetworkHelper;
-import universalelectricity.core.electricity.IElectricityNetwork;
-import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.IItemElectric;
+import universalelectricity.core.item.RFItemHelper;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
-import universalelectricity.prefab.tile.TileEntityElectricityStorage;
+import universalelectricity.prefab.tile.TileEntityRFUser;
 
-public class TileEntityBatteryBox extends TileEntityElectricityStorage implements IElectricityStorage, ISidedInventory, ICableOutputter, IStrictEnergyStorage, IStrictEnergyAcceptor {
+public class TileEntityBatteryBox extends TileEntityRFUser implements ISidedInventory{
+
+   public static final int MAX_TRANSFER = 800;
+
+   public static final int MAX_TRANSFER_INTERNAL = 400;
 
    private ItemStack[] containingItems = new ItemStack[2];
    public final Set<EntityPlayer> playersUsing = new HashSet();
 
+   boolean cached = false;
+
+   public int orientation;
+
+   public IEnergyReceiver receiver = null;
+
+
+   public TileEntityBatteryBox() {
+      super(2000000, MAX_TRANSFER, MAX_TRANSFER);
+   }
+
+   //Get Block Orientation of Output, reverse this direction for Input
+   private int getOrientationData(){
+      return this.getBlockMetadata() - 4 + 2;
+   }
+
+   protected void updateAdjacentReciever() {
+      if (!worldObj.isRemote) {
+         orientation = getOrientationData();
+         TileEntity te = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3((double) this.xCoord, (double) this.yCoord, (double) this.zCoord),
+                 ForgeDirection.getOrientation(getOrientationData()));
+         if (te instanceof IEnergyReceiver) receiver = (IEnergyReceiver) te;
+         else receiver = null;
+
+      }
+   }
+
+
+   @Override public void onNeighborChange(){
+      updateAdjacentReciever();
+   }
+
+   public int pushEnergy(int maxEnergy) {
+      if (receiver != null){
+         int toExtract = energyStorage.extractEnergy(maxEnergy,true);
+         int energy = receiver.receiveEnergy(ForgeDirection.getOrientation(orientation).getOpposite(),toExtract,false);
+         return energyStorage.extractEnergy(energy,false);
+      }
+      return 0;
+   }
+   public int extractEnergyFromItem(int slot,int energy){
+      int toReceive = energyStorage.receiveEnergy(energy,true);
+      int receivedEnergy = RFItemHelper.extractEnergyFromContainer(containingItems[slot],toReceive,false);
+      return energyStorage.receiveEnergy(receivedEnergy,false);
+   }
+
+   public int insertEnergyIntoItem(int slot , int energy){
+      int toExtract = energyStorage.extractEnergy(energy,true);
+      int extractedEnergy = RFItemHelper.insertEnergyIntoContainer(containingItems[slot],toExtract,false);
+      return energyStorage.extractEnergy(extractedEnergy,false);
+   }
+
+   @Override
+   public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+      if(forgeDirection != ForgeDirection.getOrientation(orientation).getOpposite()) return 0;
+      return super.receiveEnergy(forgeDirection, i, b);
+   }
+
 
    @Override
    public void updateEntity() {
+
       super.updateEntity();
+      if(!cached){
+         updateAdjacentReciever();
+         cached = true;
+      }
       if(!this.isDisabled() && !this.worldObj.isRemote) {
-         this.setJoules(this.getJoules() - ElectricItemHelper.chargeItem(this.containingItems[0], this.getJoules(), this.getVoltage()));
-         this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.containingItems[1], this.getMaxJoules() - this.getJoules(), this.getVoltage()));
-         ForgeDirection i$ = ForgeDirection.getOrientation(this.getBlockMetadata() - 4 + 2);
-         TileEntity player = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), i$.getOpposite());
-         TileEntity outputTile = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), i$);
-         IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(player, i$.getOpposite());
-         IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, i$);
-         if(outputNetwork != null && inputNetwork != outputNetwork) {
-            double outputWatts = Math.min(outputNetwork.getRequest(new TileEntity[]{this}).getWatts(), Math.min(this.getJoules(), 10000.0D));
-            if(this.getJoules() > 0.0D && outputWatts > 0.0D) {
-               outputNetwork.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
-               this.setJoules(this.getJoules() - outputWatts);
-            } else {
-               outputNetwork.stopProducing(this);
-            }
-         }
+         extractEnergyFromItem(1,MAX_TRANSFER_INTERNAL);
+         insertEnergyIntoItem(0,MAX_TRANSFER_INTERNAL);
+         pushEnergy(MAX_TRANSFER);
       }
 
-      this.setJoules(this.getJoules() - 5.0E-5D);
       if(!this.worldObj.isRemote && super.ticks % 3L == 0L) {
          for (EntityPlayer player : this.playersUsing) {
             if (player instanceof EntityPlayerMP) {
@@ -67,8 +116,9 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
 
    }
 
-   public boolean canConnect(ForgeDirection direction) {
-      return direction == ForgeDirection.getOrientation(this.getBlockMetadata() - 4 + 2) || direction == ForgeDirection.getOrientation(this.getBlockMetadata() - 4 + 2).getOpposite();
+   @Override
+   public boolean canConnectEnergy(ForgeDirection direction) {
+      return direction == ForgeDirection.getOrientation(orientation) || direction == ForgeDirection.getOrientation(orientation).getOpposite();
    }
 
    protected EnumSet getConsumingSides() {
@@ -78,7 +128,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
    @Override
    public Packet getDescriptionPacket() {
       NBTTagCompound nbt = new NBTTagCompound();
-      nbt.setDouble("joules", this.getJoules());
+      energyStorage.writeToNBT(nbt);
       nbt.setInteger("disabledTicks", super.disabledTicks);
       //return PacketManager.getPacket(BasicComponents.CHANNEL, this, new Object[]{Double.valueOf(this.getJoules()), Integer.valueOf(super.disabledTicks)});
       return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, getBlockMetadata(), nbt);
@@ -88,7 +138,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
       if (this.worldObj.isRemote) {
          NBTTagCompound nbt = pkt.func_148857_g();
-         this.setJoules(nbt.getDouble("joules"));
+         energyStorage.readFromNBT(nbt);
          super.disabledTicks = nbt.getInteger("disabledTicks");
       }
    }
@@ -223,11 +273,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
    public boolean canInsertItem(int slotID, ItemStack itemstack, int side) {
       if(this.isItemValidForSlot(slotID, itemstack)) {
          if(slotID == 0) {
-            return ((IItemElectric)itemstack.getItem()).getReceiveRequest(itemstack).getWatts() > 0.0D;
+            return RFItemHelper.insertEnergyIntoContainer(itemstack,1,true) > 0;
          }
 
          if(slotID == 1) {
-            return ((IItemElectric)itemstack.getItem()).getProvideRequest(itemstack).getWatts() > 0.0D;
+            return RFItemHelper.extractEnergyFromContainer(itemstack,1,true) > 0;
          }
       }
 
@@ -237,47 +287,15 @@ public class TileEntityBatteryBox extends TileEntityElectricityStorage implement
    public boolean canExtractItem(int slotID, ItemStack itemstack, int side) {
       if(this.isItemValidForSlot(slotID, itemstack)) {
          if(slotID == 0) {
-            return ((IItemElectric)itemstack.getItem()).getReceiveRequest(itemstack).getWatts() <= 0.0D;
+            return RFItemHelper.insertEnergyIntoContainer(itemstack,1,true) <= 0D;
          }
 
          if(slotID == 1) {
-            return ((IItemElectric)itemstack.getItem()).getProvideRequest(itemstack).getWatts() <= 0.0D;
+            return RFItemHelper.extractEnergyFromContainer(itemstack,1,true) <= 0;
          }
       }
 
       return false;
    }
 
-   @Override
-   public double transferEnergyToAcceptor(ForgeDirection side, double amount) {
-      if (!canReceiveEnergy(side)) return 0;
-      double toUse = Math.min(getMaxEnergy()-getEnergy(), amount);
-      setEnergy(toUse + getEnergy());
-      return toUse;
-   }
-
-   @Override
-	public boolean canReceiveEnergy(ForgeDirection side) {
-      return getConsumingSides().contains(side);
-   }
-
-   @Override
-   public double getEnergy() {
-      return getJoules();
-   }
-
-   @Override
-	public void setEnergy(double energy) {
-      setJoules(energy);
-   }
-
-   @Override
-	public double getMaxEnergy() {
-      return getMaxJoules();
-   }
-
-   @Override
-   public boolean canOutputTo(ForgeDirection side) {
-      return side == ForgeDirection.getOrientation(this.getBlockMetadata() - 4 + 2);
-   }
 }

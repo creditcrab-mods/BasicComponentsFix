@@ -41,12 +41,13 @@ public class TileEntityElectricFurnace extends TileEntityRFUser implements IInve
    @Override
    public void updateEntity() {
       super.updateEntity();
-      energyStorage.receiveEnergy(RFItemHelper.extractEnergyFromContainer(this.containingItems[0],energyStorage.getMaxReceive(),false),false);
+      var toExtract = energyStorage.receiveEnergy(RF_PER_TICK * 2,true);
+      energyStorage.receiveEnergy(RFItemHelper.extractEnergyFromContainer(this.containingItems[0],toExtract,false),false);
       if(!this.worldObj.isRemote) {
          if(this.canProcess()) {
             if(super.energyStorage.getEnergyStored() >= RF_PER_TICK) {
                if(this.processTicks == 0) {
-                  this.processTicks = 130;
+                  this.processTicks = PROCESS_TIME_REQUIRED;
                } else if(this.processTicks > 0) {
                   --this.processTicks;
                   if(this.processTicks < 1) {

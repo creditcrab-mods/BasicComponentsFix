@@ -8,6 +8,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import universalelectricity.api.energy.RFDisplay;
 import universalelectricity.api.energy.UnitDisplay;
 
 import org.lwjgl.opengl.GL11;
@@ -28,15 +29,16 @@ public class GuiBatteryBox extends GuiContainer {
    @Override
    protected void drawGuiContainerForegroundLayer(int par1, int par2) {
       this.fontRendererObj.drawString(this.tileEntity.getInventoryName(), 65, 6, 4210752);
-      String displayJoules = UnitDisplay.getDisplayShort(this.tileEntity.getJoules(), UnitDisplay.Unit.JOULES);
-      String displayMaxJoules = UnitDisplay.getDisplay(this.tileEntity.getMaxJoules(), UnitDisplay.Unit.JOULES);
+      String displayJoules = RFDisplay.displayRF(tileEntity.energyStorage.getEnergyStored());
+      String displayMaxJoules = RFDisplay.displayRF(tileEntity.energyStorage.getMaxEnergyStored());
       if(this.tileEntity.isDisabled()) {
          displayMaxJoules = "Disabled";
       }
 
-      this.fontRendererObj.drawString(displayJoules + " of", 98 - displayJoules.length(), 30, 4210752);
+      this.fontRendererObj.drawString(displayJoules, 98 - displayJoules.length(), 30, 4210752);
       this.fontRendererObj.drawString(displayMaxJoules, 78, 40, 4210752);
-      this.fontRendererObj.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 90, 60, 4210752);
+      this.fontRendererObj.drawString("In/Out:" + RFDisplay.displayRF(tileEntity.MAX_TRANSFER) + "/t", 90, 60, 4210752);
+      this.fontRendererObj.drawString("Charge:" + RFDisplay.displayRF(tileEntity.MAX_TRANSFER_INTERNAL) + "/t", 90, 70, 4210752);
       this.fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
    }
 
@@ -47,7 +49,7 @@ public class GuiBatteryBox extends GuiContainer {
       this.containerWidth = (this.width - this.xSize) / 2;
       this.containerHeight = (this.height - this.ySize) / 2;
       this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
-      int scale = (int)(this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 72.0D);
+      int scale = (int)((float)this.tileEntity.energyStorage.getEnergyStored() / (float)this.tileEntity.energyStorage.getMaxEnergyStored() * 72.0f);
       this.drawTexturedModalRect(this.containerWidth + 87, this.containerHeight + 52, 176, 0, scale, 20);
    }
 }

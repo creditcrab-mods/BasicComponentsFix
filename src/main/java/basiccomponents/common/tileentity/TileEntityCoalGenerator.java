@@ -40,6 +40,8 @@ public class TileEntityCoalGenerator extends TileEntityRFProducer implements IIn
    public IEnergyReceiver receiver;
    public int orientation = 0;
 
+   boolean cached = false;
+
    public TileEntityCoalGenerator() {
       super(32000, 40, Integer.MAX_VALUE);
    }
@@ -73,10 +75,18 @@ public class TileEntityCoalGenerator extends TileEntityRFProducer implements IIn
       return 0;
    }
 
+   public void onLoad(){
+
+   }
+
 
    @Override
    public void updateEntity() {
       super.updateEntity();
+      if(!cached){
+         updateAdjacentReciever();
+         cached = true;
+      }
       if(!this.worldObj.isRemote) {
          ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - 0 + 2);
          if(!this.isDisabled()) {

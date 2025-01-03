@@ -1,6 +1,7 @@
 package basiccomponents.common.container;
 
 import basiccomponents.common.tileentity.TileEntityBatteryBox;
+import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -16,8 +17,8 @@ public class ContainerBatteryBox extends Container {
 
    public ContainerBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox) {
       this.tileEntity = batteryBox;
-      this.addSlotToContainer(new SlotSpecific(batteryBox, 0, 33, 24, new Class[]{IItemElectric.class}));
-      this.addSlotToContainer(new SlotSpecific(batteryBox, 1, 33, 48, new Class[]{IItemElectric.class}));
+      this.addSlotToContainer(new SlotSpecific(batteryBox, 0, 33, 24, new Class[]{IEnergyContainerItem.class}));
+      this.addSlotToContainer(new SlotSpecific(batteryBox, 1, 33, 48, new Class[]{IEnergyContainerItem.class}));
 
       int var3;
       for(var3 = 0; var3 < 3; ++var3) {
